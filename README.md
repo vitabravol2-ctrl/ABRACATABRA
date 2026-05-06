@@ -1,43 +1,50 @@
-# Lightning Trader BTCUSDT v0.1
+# Lightning Trader BTCUSDT v0.2 — GUI Cockpit
 
-Базовая архитектура умного алгоритма для Binance Spot BTCUSDT:
-`MarketBrain → RiskBrain → EntryBrain → ExitBrain → OrderBrain`.
+Обновлённый интерфейс переведён на компактный cockpit-формат (ttk) без изменения логики мозгов алгоритма.
 
-## Что добавлено
-- Вкладка **Algorithms**:
-  - алгоритм `Lightning Trader BTCUSDT`
-  - состояния ENABLED / PAUSED / DISABLED
-  - режим DRY-RUN по умолчанию, LIVE заблокирован (LIVE_LOCKED)
-  - кнопки Start / Pause / Stop и кнопка LIVE с предупреждением
-  - компактный decision-log по шагам
-- Вкладка **Settings**:
-  - группы Market / Risk / Entry / Exit с параметрами из ТЗ
-- Карточка пары BTCUSDT:
-  - price, bid, ask, spread, 24h change, volume, WS/API status, latency
-  - USDT/BTC balance
-  - algorithm status, current decision, reason
-  - current position, unrealized/realized PnL
-- Модули:
-  - `MarketBrain`, `RiskBrain`, `EntryBrain`, `ExitBrain`, `OrderBrain`, `TradeJournal`
-- Reason-codes:
-  - `MARKET_OK`, `MARKET_DANGER`, `DATA_STALE`, `SPREAD_TOO_SMALL`, `EDGE_TOO_SMALL`,
-    `BALANCE_LOW`, `RISK_LIMIT`, `ENTRY_READY`, `ENTRY_CANCELLED`, `BUY_FILLED`,
-    `SELL_PLACED`, `TAKE_PROFIT_READY`, `EMERGENCY_EXIT`, `TRAILING_ACTIVE`,
-    `POSITION_CLOSED`, `WAIT`
-- Безопасность:
-  - только DRY-RUN по умолчанию
-  - LIVE автоматически не включается
-  - предупреждение перед LIVE
-  - обработка ошибок API без падения GUI
-  - stop останавливает логику и очищает активный ордер
-  - защита от duplicate order
-  - журнал решений в JSON + CSV
+## Что сделано
+
+### 1) Главная вкладка: **BTCUSDT Cockpit**
+- Верхняя панель статуса:
+  - `SYMBOL`, `PRICE`, `MODE`, `ALGO`, `WS`, `API`, `LATENCY ms`
+- Авиационные индикаторы:
+  - `Market State`, `Decision`, `Risk Level`, `Spread`, `Data Health`, `Position`, `Profit`
+- Центральная панель больших значений:
+  - `Price`, `Bid`, `Ask`, `Spread bps`, `24h %`, `Volume`, `Current Position`, `uPnL`, `rPnL Today`
+- Decision Panel:
+  - `Decision`, `Reason`, `Text`
+- Нижняя панель управления:
+  - `CONNECT`, `START`, `PAUSE`, `STOP`, `DRY-RUN`, `LIVE LOCKED`
+
+### 2) Вкладка **Logs**
+- Раздельные окна для:
+  - Decision log
+  - Error log
+  - Orders log
+- Auto-scroll
+- Кнопка `Save Log`
+- Ограничение вывода последних записей для снижения спама
+
+### 3) Вкладка **Settings**
+Оформлена группами:
+- Market
+- Risk
+- Entry
+- Exit
+- Safety
+
+### 4) Технические изменения
+- GUI работает на `tkinter.ttk` и больше не использует огромный `Text` как основной экран.
+- Все данные экрана обновляются через единый цикл `update_snapshot()`.
+- Логика алгоритмов `MarketBrain/RiskBrain/EntryBrain/ExitBrain/OrderBrain` сохранена.
+- Режим `DRY-RUN` оставлен по умолчанию.
+- `LIVE LOCKED` остаётся заблокированным и показывает предупреждение.
 
 ## Запуск
 ```bash
 ./run_pair_info.sh
 ```
-или
+или напрямую:
 ```bash
 python3 pair_info_card.py
 ```
@@ -46,8 +53,3 @@ python3 pair_info_card.py
 ```bash
 python3 -m pytest -q
 ```
-
-## Измененные файлы
-- `pair_info_card.py`
-- `tests/test_brains.py`
-- `README.md`
