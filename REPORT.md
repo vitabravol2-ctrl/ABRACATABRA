@@ -1,25 +1,19 @@
-# REPORT — Lightning Trader BTCUSDT v0.2 GUI Cockpit
+# REPORT — Lightning Trader v0.3 Multi Algorithm
 
-## Кратко
-Полностью переработан GUI в формат cockpit-панели трейдера:
-- статусная строка;
-- индикаторы состояния рынка/риска;
-- центральные метрики;
-- панель решения;
-- нижние кнопки управления;
-- отдельные вкладки Logs и Settings.
+## Что сделано
+- GUI разделён на Cockpit + Algorithms + App Settings + Algorithm Settings + Safety Settings.
+- Добавлен **Algorithm Manager** с выбором активного алгоритма.
+- Введён базовый интерфейс `BaseStrategy` и пакет `strategies/` для масштабирования.
+- Добавлены конфиги `config/app_settings.json` и `config/strategy_settings.json`.
+- DRY-RUN по умолчанию сохранён, LIVE остаётся LOCKED.
+- Одновременно подразумевается один активный алгоритм (selected_algo в состоянии Cockpit).
 
-## Что не менялось
-- Алгоритмические блоки принятия решений и управления ордерами (brains) сохранены.
+## Совместимость
+- Базовые brain-классы (`MarketBrain`, `RiskBrain`, `EntryBrain`, `ExitBrain`) сохранены, тесты продолжают проходить.
 
-## Безопасность
-- DRY-RUN по умолчанию.
-- LIVE mode остаётся LOCKED (предупреждение при активации).
-
-## Инструкция запуска
-1. `python3 -m pip install -U pytest` (опционально для тестов)
-2. Запуск GUI:
-   - `./run_pair_info.sh`
-   - или `python3 pair_info_card.py`
-3. Тесты:
-   - `python3 -m pytest -q`
+## Multi Algorithm Architecture
+1. **UI layer** (`PairInfoCardApp`) показывает рынок + состояние выбранной стратегии.
+2. **Engine layer** (`LightningTraderEngine`) выполняет цикл принятия решения.
+3. **Strategy layer** (`strategies/*.py`) содержит расширяемые стратегии через `BaseStrategy`.
+4. **Config layer** (`config/*.json`) разделяет app-level и strategy-level конфигурацию.
+5. **Persistence layer** (`journals/`, `logs/`) хранит журналы и логи.
