@@ -1,50 +1,34 @@
-# Lightning Trader BTCUSDT v0.2 — GUI Cockpit
+# Lightning Trader v0.3 — Multi Algorithm Cockpit
 
-Обновлённый интерфейс переведён на компактный cockpit-формат (ttk) без изменения логики мозгов алгоритма.
+## Архитектура
 
-## Что сделано
+Приложение перестроено под мульти-алгоритмический режим с единым Cockpit и отдельным Algorithm Manager.
 
-### 1) Главная вкладка: **BTCUSDT Cockpit**
-- Верхняя панель статуса:
-  - `SYMBOL`, `PRICE`, `MODE`, `ALGO`, `WS`, `API`, `LATENCY ms`
-- Авиационные индикаторы:
-  - `Market State`, `Decision`, `Risk Level`, `Spread`, `Data Health`, `Position`, `Profit`
-- Центральная панель больших значений:
-  - `Price`, `Bid`, `Ask`, `Spread bps`, `24h %`, `Volume`, `Current Position`, `uPnL`, `rPnL Today`
-- Decision Panel:
-  - `Decision`, `Reason`, `Text`
-- Нижняя панель управления:
-  - `CONNECT`, `START`, `PAUSE`, `STOP`, `DRY-RUN`, `LIVE LOCKED`
+### Вкладки GUI
+- **Cockpit**: SYMBOL, PRICE, BID/ASK, SPREAD, WS/API/LATENCY, MARKET STATE, SELECTED ALGO, ALGO STATUS, DECISION, POSITION, PNL, RISK.
+- **Algorithms**: список алгоритмов, управление активным алгоритмом (select/enable/start/stop).
+- **App Settings**: глобальные настройки приложения.
+- **Algorithm Settings**: редактируемые поля настроек выбранного алгоритма.
+- **Safety Settings**: DRY-RUN default, LIVE LOCKED, single active algo.
 
-### 2) Вкладка **Logs**
-- Раздельные окна для:
-  - Decision log
-  - Error log
-  - Orders log
-- Auto-scroll
-- Кнопка `Save Log`
-- Ограничение вывода последних записей для снижения спама
+### Algorithm Manager
+Поддерживаемые стратегии:
+- Lightning Trader BTCUSDT
+- Basic Scalper
+- Adaptive Grid
+- Martingale Scalper placeholder
+- Empty Strategy Template
 
-### 3) Вкладка **Settings**
-Оформлена группами:
-- Market
-- Risk
-- Entry
-- Exit
-- Safety
+Для каждой стратегии доступны поля:
+`name`, `version`, `status`, `description`, `risk_profile`, `enabled`, `compatible_symbols`, `settings_schema`.
 
-### 4) Технические изменения
-- GUI работает на `tkinter.ttk` и больше не использует огромный `Text` как основной экран.
-- Все данные экрана обновляются через единый цикл `update_snapshot()`.
-- Логика алгоритмов `MarketBrain/RiskBrain/EntryBrain/ExitBrain/OrderBrain` сохранена.
-- Режим `DRY-RUN` оставлен по умолчанию.
-- `LIVE LOCKED` остаётся заблокированным и показывает предупреждение.
+### Структура папок
+- `strategies/` — базовый интерфейс и стратегии
+- `config/` — `app_settings.json`, `strategy_settings.json`
+- `journals/` — журнал сделок
+- `logs/` — технические логи
 
 ## Запуск
-```bash
-./run_pair_info.sh
-```
-или напрямую:
 ```bash
 python3 pair_info_card.py
 ```

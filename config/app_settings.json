@@ -1,0 +1,11 @@
+{
+  "theme": "clam",
+  "update_interval_ms": 1000,
+  "log_limit": 200,
+  "autosave_journal": true,
+  "api_key_path": "./config/api.key",
+  "default_symbol": "BTCUSDT",
+  "data_source_mode": "HYBRID",
+  "reconnect_enabled": true,
+  "max_latency_ms": 1500
+}
