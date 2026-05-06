@@ -1,17 +1,39 @@
-# Liquidity Grab Bot v0.1.0 (Core Kernel)
+# Liquidity Grab Bot v0.1.1 (FSM Tests & Scenario Validation)
 
 Минимальное ядро FSM-алгоритма для симуляции паттерна liquidity grab (без live trading).
 
-## Запуск
+## Запуск сценариев
 
 ```bash
 cd liquidity_grab_bot
-python main.py
+python main.py --scenario success_tp
+python main.py --scenario no_reclaim
+python main.py --scenario timeout_exit
 ```
 
-Или через скрипты:
+Поддерживаемые сценарии:
+- `success_tp` (по умолчанию)
+- `no_reclaim`
+- `new_low_after_impulse`
+- `spread_too_wide`
+- `timeout_exit`
+
+Если аргумент `--scenario` не указан, запускается `success_tp`.
+
+Или через скрипты запуска:
 - `scripts/run.bat`
 - `scripts/run.ps1`
+
+## Запуск тестов
+
+```bash
+cd liquidity_grab_bot
+python -m unittest discover -s tests
+```
+
+Windows-скрипты:
+- `scripts/test.bat`
+- `scripts/test.ps1`
 
 ## Обновление из Git
 
